@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+</head>
+
+<body style="height: 100vh;
+            width: 100vw;
+            " class="center">
+
+    <div style="height: 400px;
+                width: 650px;
+                border-radius: 9px;
+                background-color: grey;" 
+                class="center">
+        <div style="
+                display: flex; 
+                flex-direction: column;
+                align-items: center;">
+            <h2 >Login Page</h2>
+            <div style=" 
+                display: flex; 
+                flex-direction: column;
+                align-items: center;
+                margin: 20px 100px;">
+                <form action="/login" method="post" id="loginForm">
+                    <input type="text" placeholder="Username" name="username" id="UsernameInput">
+                    <input type="password" placeholder="Password" name="password" id="PasswordInput">
+                    <br>
+                    <button type="submit"
+                    style="margin: 20px 170px;"
+                    >Login</button>
+                </form>	
+                <a onclick="Login()" style="color: blue;">Create an account ?</a>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Result Area -->
+    <div class="center" id="Result"></div>
+
+    <style>
+        input {
+            margin: 10px;
+            border: 0;
+            height: 35px;
+            width: 400px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        button {
+            padding: 8px;
+            width: 100px;
+            height: 35px;
+            margin: auto;
+            border-radius: 5px;
+            border: 0;
+        }
+
+        .center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+
+<script>
+    function Login() {
+        // Redirect to the login page
+        window.location.href = "http://localhost:2000/signup"; // Change the URL to your login page's URL
+    }
+</script>
+
+</body>
+
+</html>
