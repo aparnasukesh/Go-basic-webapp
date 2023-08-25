@@ -4,9 +4,11 @@ import (
 	"html/template"
 	"net/http"
 
+	"aparnasukesh/github.com/Go-basic-webapp/middlware"
 	"aparnasukesh/github.com/Go-basic-webapp/model"
 
 	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,9 +16,12 @@ var signupData = make(map[string]model.UserData)
 
 func Routes(r *gin.Engine) {
 
-	r.GET("/login", loginPage)
-	r.GET("/signup", signUpPage)
-	r.GET("/home", homePage)
+	store := cookie.NewStore([]byte("xyz"))
+	r.Use(sessions.Sessions("session", store))
+
+	r.GET("/login", middlware.Middleware, loginPage)
+	r.GET("/signup", middlware.Middleware, signUpPage)
+	r.GET("/home", middlware.AuthRequired(), homePage)
 
 	r.POST("/login", Login)
 	r.POST("/signup", signUp)

@@ -23,7 +23,7 @@ func AuthRequired() gin.HandlerFunc {
 func Middleware(c *gin.Context) {
 	session := sessions.Default(c)
 	if session.Get("username") != nil {
-		c.Redirect(http.StatusSeeOther, "/homepage")
+		c.Redirect(http.StatusSeeOther, "/home")
 		c.Abort()
 		return
 	}
