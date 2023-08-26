@@ -14,6 +14,14 @@ import (
 
 var signupData = make(map[string]model.UserData)
 
+type validate struct {
+	message string
+}
+
+var Validate = validate{
+	message: "",
+}
+
 func Routes(r *gin.Engine) {
 
 	store := cookie.NewStore([]byte("xyz"))
@@ -35,7 +43,7 @@ func loginPage(ctx *gin.Context) {
 			"Error": err,
 		})
 	}
-	err = temp.Execute(ctx.Writer, nil)
+	err = temp.Execute(ctx.Writer, Validate)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"Error": err,
@@ -48,14 +56,17 @@ func Login(ctx *gin.Context) {
 	password := ctx.PostForm("password")
 
 	if user, found := signupData[username]; found && user.Password == password {
+		Validate.message = ""
 		session := sessions.Default(ctx)
 		session.Set("username", username)
 		session.Save()
 		ctx.Redirect(http.StatusMovedPermanently, "/home")
 	} else {
+		Validate.message = "invalide username and password"
 		ctx.JSON(400, gin.H{
 			"Message": "invalide username and password",
 		})
+		// ctx.Redirect(http.StatusSeeOther, "/login")
 	}
 }
 
