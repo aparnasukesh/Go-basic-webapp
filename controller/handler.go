@@ -3,6 +3,7 @@ package controller
 import (
 	"html/template"
 	"net/http"
+	"strconv"
 
 	"aparnasukesh/github.com/Go-basic-webapp/middlware"
 	"aparnasukesh/github.com/Go-basic-webapp/model"
@@ -16,10 +17,6 @@ var signupData = make(map[string]model.UserData)
 
 type validate struct {
 	message string
-}
-
-var Validate = validate{
-	message: "",
 }
 
 func Routes(r *gin.Engine) {
@@ -43,7 +40,7 @@ func loginPage(ctx *gin.Context) {
 			"Error": err,
 		})
 	}
-	err = temp.Execute(ctx.Writer, Validate)
+	err = temp.Execute(ctx.Writer, nil)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"Error": err,
@@ -55,18 +52,20 @@ func Login(ctx *gin.Context) {
 	username := ctx.PostForm("username")
 	password := ctx.PostForm("password")
 
+	if username == "" || password == "" {
+		ctx.JSON(200, gin.H{"error": "All fields are required"})
+		return
+	}
+
 	if user, found := signupData[username]; found && user.Password == password {
-		Validate.message = ""
 		session := sessions.Default(ctx)
 		session.Set("username", username)
 		session.Save()
 		ctx.Redirect(http.StatusMovedPermanently, "/home")
 	} else {
-		Validate.message = "invalide username and password"
-		ctx.JSON(400, gin.H{
-			"Message": "invalide username and password",
+		ctx.JSON(200, gin.H{
+			"error": "Invalide username and password",
 		})
-		// ctx.Redirect(http.StatusSeeOther, "/login")
 	}
 }
 
@@ -89,12 +88,14 @@ func signUp(ctx *gin.Context) {
 	username := ctx.PostForm("username")
 	password := ctx.PostForm("password")
 	email := ctx.PostForm("email")
-	age := ctx.PostForm("age")
+	ageStr := ctx.PostForm("age")
 
-	if username == "" || password == "" || email == "" || age == "" {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "All fields are required"})
+	if username == "" || password == "" || email == "" || ageStr == "" {
+		ctx.JSON(200, gin.H{"error": "All fields are required"})
 		return
 	}
+
+	age, err := strconv.Atoi(ageStr)
 
 	userdata := model.UserData{
 		Username: username,
@@ -102,25 +103,40 @@ func signUp(ctx *gin.Context) {
 		Email:    email,
 		Age:      age,
 	}
+
+	err = model.Validate(userdata)
+	if err != nil {
+		ctx.JSON(200, gin.H{"error": err.Error()})
+		return
+	}
+
 	signupData[username] = userdata
 
 	ctx.Redirect(http.StatusSeeOther, "/login")
 }
 
 func homePage(ctx *gin.Context) {
+	session := sessions.Default(ctx)
+	username := session.Get("username")
+
 	temp, err := template.ParseFiles("view/home.html")
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"Error": err,
 		})
+		return
 	}
-	err = temp.Execute(ctx.Writer, nil)
+
+	data := map[string]interface{}{
+		"Username": username,
+	}
+
+	err = temp.Execute(ctx.Writer, data)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"Error": err,
 		})
 	}
-
 }
 
 func Logout(ctx *gin.Context) {

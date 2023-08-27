@@ -7,21 +7,18 @@
     <title>Login Page</title>
 </head>
 
-<body style="height: 100vh;
-            width: 100vw;
-            " class="center">
+<body style="height: 100vh; width: 100vw; background-color: rgb(87, 53, 53); margin: 0; overflow: hidden;" class="center">
 
-    <div style="height: 400px;
-                width: 650px;
-                border-radius: 9px;
-                background-color: grey;" 
-                class="center">
+    <div style="height: 600px;
+    width: 650px;
+    border-radius: 9px;
+    background-color: rgb(226, 220, 220); overflow: hidden;" class="center">
         <div style="
                 display: flex; 
                 flex-direction: column;
                 align-items: center;">
-            <h2 >Login Page</h2>
-            <p id="errMsg" style="margin-top: 0;margin-bottom: 0;color: red;;"></p>
+            <h2>Login Page</h2>
+            <p id="err" style="margin-top: 0; margin-bottom: 0; color: rgb(195, 20, 20);font-size: large;"></p>
             <div style=" 
                 display: flex; 
                 flex-direction: column;
@@ -31,11 +28,9 @@
                     <input type="text" placeholder="Username" name="username" id="UsernameInput">
                     <input type="password" placeholder="Password" name="password" id="PasswordInput">
                     <br>
-                    <button type="submit"
-                    style="margin: 20px 170px;"
-                    >Login</button>
-                </form>	
-                <a onclick="Login()" style="color: blue;">Create an account ?</a>
+                    <button type="submit" style="margin: 20px 170px;">Login</button>
+                </form>
+                <p>Create an account <a onclick="Login()" style="color: blue;"> SignUp</a></p>
             </div>
         </div>
 
@@ -48,17 +43,19 @@
         input {
             margin: 10px;
             border: 0;
-            height: 35px;
-            width: 400px;
+            height: 50px;
+            width: 480px;
             border-radius: 5px;
             text-align: center;
         }
 
         button {
             padding: 8px;
-            width: 100px;
+            width: 180px;
             height: 35px;
             margin: auto;
+            background-color: rgb(26, 23, 23);
+            color: aliceblue;
             border-radius: 5px;
             border: 0;
         }
@@ -70,23 +67,35 @@
         }
     </style>
 
-<script>
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
 
+            const formData = new FormData(event.target);
 
-     (function (){
-        console.log('working---')
-         document.getElementById('errMsg').innerHTML = 'error occured'
-        setTimeout(()=>{
-            document.getElementById('errMsg').innerHTML = ''
-        },3000)
-     })()
-    
+            try {
+                const response = await fetch("/login", {
+                    method: "POST",
+                    body: formData,
+                });
 
-    function Login() {
-        // Redirect to the login page
-        window.location.href = "http://localhost:2000/signup"; // Change the URL to your login page's URL
-    }
-</script>
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(data);
+                    document.getElementById("err").textContent = data.error; // Use data directly
+                } else {
+                    document.getElementById("err").textContent = "Error occurred.";
+                }
+            } catch (error) {
+                window.location.href = "http://localhost:2000/login";
+            }
+        });
+
+        function Login() {
+            // Redirect to the login page
+            window.location.href = "http://localhost:2000/signup"; // Change the URL to your login page's URL
+        }
+    </script>
 
 </body>
 

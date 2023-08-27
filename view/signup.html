@@ -4,84 +4,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>signup Page</title>
-</head>
-
-<body style="height: 100vh;
-            width: 100vw;
-            " class="center">
-
-    <div style="height: 600px;
-                width: 650px;
-                border-radius: 9px;
-                background-color: grey;" 
-                class="center">
-        <div style="
-                display: flex; 
-                flex-direction: column;
-                align-items: center;">
-            <h2 >Signup  Page</h2>
-            <div style=" 
-                display: flex; 
-                flex-direction: column;
-                align-items: center;
-                margin: 20px 100px;">
-                <form action="/signup" method="post" id="loginForm">
-                    <input type="text" placeholder="Username" name="username" id="UsernameInput">
-                    <input type="email" placeholder="Email" name="email" id="EmailInput">
-                    <input type="password" placeholder="Password" name="password" id="PasswordInput">
-                    <input type="age" placeholder="Age" name="age" id="AgeInput">
-
-                    <br>
-                    <button type="submit"
-                    style="margin: 20px 170px;"
-                    >Signup</button>
-                </form>	
-
-               <a onclick="Login()" style="color: blue;">already have an acount ?</a>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Result Area -->
-    <div class="center" id="Result"></div>
-
+    <title>Signup Page</title>
     <style>
-        input {
-            margin: 10px;
-            border: 0;
-            height: 35px;
-            width: 400px;
+        input, button {
+            margin: 10px 0;
+            padding: 8px;
+            width: 100%;
+            border: none;
             border-radius: 5px;
+        }
+
+        input {
+            height: 40px;
             text-align: center;
         }
 
         button {
-            padding: 8px;
-            width: 100px;
-            height: 35px;
-            margin: auto;
-            background-color: rgb(184, 184, 184);
-            border-radius: 5px;
-            border: 0;
+            background-color: rgb(26, 23, 23);
+            color: aliceblue;
+            cursor: pointer;
         }
 
-        .center {
+        body {
+            margin: 0;
+            padding: 0;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: rgb(87, 53, 53);
         }
     </style>
+</head>
 
-<script>
-    function Login() {
-        // Redirect to the login page
-        window.location.href = "http://localhost:2000/login"; // Change the URL to your login page's URL
-    }
-</script>
+<body>
+    <div style="max-width: 650px;
+                width: 100%;
+                border-radius: 9px;
+                background-color: rgb(226, 220, 220);
+                padding: 30px;
+                text-align: center;">
 
+        <h2>Signup Page</h2>
+        <p id="err" style="color: rgb(195, 20, 20); font-size: large;"></p>
 
+        <form action="/signup" method="post" id="signupForm">
+            <input type="text" placeholder="Username" name="username" id="UsernameInput">
+            <input type="email" placeholder="Email" name="email" id="EmailInput">
+            <input type="password" placeholder="Password" name="password" id="PasswordInput">
+            <input type="number" placeholder="Age" name="age" id="AgeInput">
+
+            <button type="submit">Signup</button>
+        </form>
+
+        <p>Already have an account? <a href="http://localhost:2000/login" style="color: blue;">Login</a></p>
+
+    </div>
+
+    <script>
+        document.getElementById("signupForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+
+            try {
+                const response = await fetch("/signup", {
+                    method: "POST",
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(data);
+                    document.getElementById("err").textContent = data.error; // Use data directly
+                } else {
+                    document.getElementById("err").textContent = "Error occurred.";
+                }
+            } catch (error) {
+                window.location.href = "http://localhost:2000/login";
+            }
+        });
+    </script>
 </body>
 
 </html>
