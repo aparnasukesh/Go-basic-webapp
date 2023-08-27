@@ -58,6 +58,16 @@
             <input type="submit" value="Logout">
         </form>
     </div>
+
+    <script>
+       // Clear cache on page load
+       window.onload = function () {
+            if (performance.navigation.type === 2) {
+                // Back or forward button was clicked
+                window.location.reload(true);
+            }
+        };
+    </script>
 </body>
 
 </html>

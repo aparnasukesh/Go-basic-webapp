@@ -34,6 +34,9 @@ func Routes(r *gin.Engine) {
 }
 
 func loginPage(ctx *gin.Context) {
+
+	ctx.Header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+
 	temp, err := template.ParseFiles("view/login.html")
 	if err != nil {
 		ctx.JSON(400, gin.H{
@@ -70,6 +73,9 @@ func Login(ctx *gin.Context) {
 }
 
 func signUpPage(ctx *gin.Context) {
+
+	ctx.Header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+
 	temp, err := template.ParseFiles("view/signup.html")
 	if err != nil {
 		ctx.JSON(400, gin.H{
@@ -118,6 +124,8 @@ func signUp(ctx *gin.Context) {
 func homePage(ctx *gin.Context) {
 	session := sessions.Default(ctx)
 	username := session.Get("username")
+
+	ctx.Header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
 
 	temp, err := template.ParseFiles("view/home.html")
 	if err != nil {

@@ -7,7 +7,8 @@
     <title>Login Page</title>
 </head>
 
-<body style="height: 100vh; width: 100vw; background-color: rgb(87, 53, 53); margin: 0; overflow: hidden;" class="center">
+<body style="height: 100vh; width: 100vw; background-color: rgb(87, 53, 53); margin: 0; overflow: hidden;"
+    class="center">
 
     <div style="height: 600px;
     width: 650px;
@@ -95,6 +96,15 @@
             // Redirect to the login page
             window.location.href = "http://localhost:2000/signup"; // Change the URL to your login page's URL
         }
+
+
+        // Clear cache on page load
+        window.onload = function () {
+            if (performance.navigation.type === 2) {
+                // Back or forward button was clicked
+                window.location.reload(true);
+            }
+        };
     </script>
 
 </body>

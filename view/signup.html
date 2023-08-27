@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup Page</title>
     <style>
-        input, button {
+        input,
+        button {
             margin: 10px 0;
             padding: 8px;
             width: 100%;
@@ -84,6 +85,14 @@
                 window.location.href = "http://localhost:2000/login";
             }
         });
+
+        // Clear cache on page load
+        window.onload = function () {
+            if (performance.navigation.type === 2) {
+                // Back or forward button was clicked
+                window.location.reload(true);
+            }
+        };
     </script>
 </body>
 
