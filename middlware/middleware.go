@@ -20,13 +20,13 @@ func AuthRequired() gin.HandlerFunc {
 	}
 }
 
-func Middleware(c *gin.Context) {
-	session := sessions.Default(c)
+func Middleware(ctx *gin.Context) {
+	session := sessions.Default(ctx)
 	if session.Get("username") != nil {
-		c.Redirect(http.StatusSeeOther, "/home")
-		c.Abort()
+		ctx.Redirect(http.StatusSeeOther, "/home")
+		ctx.Abort()
 		return
 	}
 
-	c.Next()
+	ctx.Next()
 }

@@ -52,6 +52,7 @@ func loginPage(ctx *gin.Context) {
 }
 
 func Login(ctx *gin.Context) {
+	ctx.Done()
 	username := ctx.PostForm("username")
 	password := ctx.PostForm("password")
 

@@ -76,7 +76,6 @@
 
                 if (response.ok) {
                     const data = await response.json();
-                    console.log(data);
                     document.getElementById("err").textContent = data.error; // Use data directly
                 } else {
                     document.getElementById("err").textContent = "Error occurred.";

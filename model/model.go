@@ -19,6 +19,7 @@ func Validate(userData UserData) error {
 
 	if err != nil {
 		validationErrors := err.(validator.ValidationErrors)
+
 		for _, e := range validationErrors {
 
 			if e.Field() == "Email" {
